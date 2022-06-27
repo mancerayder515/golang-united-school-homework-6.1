@@ -50,7 +50,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 	if ok != nil {
 		return sh, fmt.Errorf("cannot extract nonexistent: %w", ok)
 	}
-	b.shapes[i] = nil
+	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
 	return sh, ok
 }
 
@@ -95,7 +95,7 @@ func (b *box) RemoveAllCircles() error {
 	found := false
 	for i, shape := range b.shapes {
 		if _, ok := shape.(Circle); ok {
-			_, _ = b.ReplaceByIndex(i, nil)
+			_, _ = b.ExtractByIndex(i)
 			found = true
 		}
 	}
